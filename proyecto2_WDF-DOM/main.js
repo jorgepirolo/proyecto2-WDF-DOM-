@@ -132,10 +132,13 @@ for (const vendor of uniquevendors.sort()) {
   filtervendor.appendChild(option)
 }
 //? Variable para array de productos filtrados
-let productfiltrado = []
+let productfiltrado = [...products]
 
 //? Funcion para incluir en el array los productos seleccionados, que elimina el HTML del div de productos y llama a la funcion pintar con el array filtrado, dejandolo limpio nuevamente para próximo filtro.
 const showselected = () => {
+  productfiltrado = []
+  const budget = document.querySelector('.budgetinput')
+  budget.value = ''
   let vendorshow = select.value
 
   for (let i = 0; i < products.length; i++) {
@@ -149,7 +152,6 @@ const showselected = () => {
   const section = document.querySelector('.products')
   section.innerHTML = ''
   pintarproductos(productfiltrado)
-  productfiltrado = []
 }
 
 //? Escuchador de evento para saber cuando se haya filtrado por vendedor
@@ -159,16 +161,16 @@ select.addEventListener('change', showselected)
 //? Funcion para filtrar por precio
 let productbudget = []
 const showbudget = () => {
+  productbudget = []
   const valorinput = budget.value
-  for (let i = 0; i < products.length; i++) {
-    if (products[i].price <= valorinput) {
-      productbudget.push(products[i])
+  for (let i = 0; i < productfiltrado.length; i++) {
+    if (productfiltrado[i].price <= valorinput) {
+      productbudget.push(productfiltrado[i])
     }
   }
   const section = document.querySelector('.products')
   section.innerHTML = ''
   pintarproductos(productbudget)
-  productbudget = []
 }
 
 //? Segundo filtro por precio
@@ -182,7 +184,7 @@ const limpiafiltro = () => {
   section.innerHTML = ''
   pintarproductos(products)
   budget.value = ''
-  select.value = ''
+  select.value = 'All products'
 }
 const limpia = document.querySelector('.limpia')
 limpia.addEventListener('click', limpiafiltro)
